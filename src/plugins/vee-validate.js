@@ -1,4 +1,4 @@
-import { defineRule,configure } from 'vee-validate';
+import {configure, defineRule} from 'vee-validate';
 
 configure({
     validateOnInput: true,

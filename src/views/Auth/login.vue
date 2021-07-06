@@ -1,17 +1,19 @@
 <template>
+
   <Form @submit="onSubmit">
     <div class="form-login">
       <div class="mb-3">
         <label class="form-label"
                for="email">Email address</label>
-        <Field v-model="email" class="form-control" name="email" rules="required|email"/>
+        <Field v-model="email" class="form-control" name="email" rules="required|email|minLength:8,128" type="text"/>
         <ErrorMessage class="err-message" name="email"/>
       </div>
 
       <div class="mb-3">
         <label class="form-label"
                for="password">Password</label>
-        <Field v-model="password" class="form-control" name="password" rules="required|min:8"/>
+        <Field v-model="password" class="form-control" name="password" rules="required|minLength:8,128"
+               type="password"/>
         <ErrorMessage class="err-message" name="password"/>
       </div>
       <button class="btn btn-light">Login</button>
