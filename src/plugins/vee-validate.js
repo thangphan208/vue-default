@@ -1,39 +1,59 @@
-import Vue from "vue";
-import { extend, localize } from "vee-validate";
-import { required, email, min } from "vee-validate/dist/rules";
-import vi from "vee-validate/dist/locale/vi.json";
-import en from "vee-validate/dist/locale/en.json";
+import { defineRule,configure } from 'vee-validate';
 
-// Install required rule.
-extend("required", required);
-
-// Install email rule.
-extend("email", email);
-
-// Install min rule.
-extend("min", min);
-
-// Install English and VN localizations.
-localize({
-    en: {
-        messages: en.messages,
-
-    },
-    vi: {
-        messages: vi.messages,
-    }
+configure({
+    validateOnInput: true,
 });
 
-let LOCALE = "vi";
 
-// A simple get/set interface to manage our locale in components.
-// This is not reactive, so don't create any computed properties/watchers off it.
-Object.defineProperty(Vue.prototype, "locale", {
-    get() {
-        return LOCALE;
-    },
-    set(val) {
-        LOCALE = val;
-        localize(val);
+defineRule('required', value => {
+    if (!value || !value.length) {
+        return 'This field is required';
     }
+
+    return true;
+});
+
+defineRule('email', value => {
+    // Field is empty, should pass
+    if (!value || !value.length) {
+        return true;
+    }
+
+    const reg = new RegExp(/^\S+@\S+$/);
+    // Check if email
+    if (!reg.test(value)) {
+        return 'This field must be a valid email';
+    }
+
+    return true;
+});
+
+defineRule('minLength', (value, [min, max]) => {
+    // The field is empty so it should pass
+    if (!value || !value.length) {
+        return true;
+    }
+    const numericValue = Number(value);
+    if (numericValue < min) {
+        return `This field must be greater than ${min}`;
+    }
+
+    if (numericValue > max) {
+        return `This field must be less than ${max}`;
+    }
+
+    return true;
+});
+
+defineRule('min', (value, [limit]) => {
+    // The field is empty so it should pass
+    if (!value || !value.length) {
+        return true;
+    }
+
+    if (value.length < limit) {
+        return `This field must be at least ${limit} characters`;
+    }
+
+    return true;
 });

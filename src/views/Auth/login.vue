@@ -1,54 +1,66 @@
 <template>
-<div class="container">
-  <div class="login-form mt-5">
-    <form>
+  <Form @submit="onSubmit">
+    <div class="form-login">
       <div class="mb-3">
-        <label for="exampleInputEmail1" class="form-label">Email address</label>
-        <input type="email" v-model="account.username" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+        <label class="form-label"
+               for="email">Email address</label>
+        <Field v-model="email" class="form-control" name="email" rules="required|email"/>
+        <ErrorMessage class="err-message" name="email"/>
       </div>
+
       <div class="mb-3">
-        <label for="exampleInputPassword1" class="form-label">Password</label>
-        <input type="password" v-model="account.password" class="form-control" id="exampleInputPassword1">
+        <label class="form-label"
+               for="password">Password</label>
+        <Field v-model="password" class="form-control" name="password" rules="required|min:8"/>
+        <ErrorMessage class="err-message" name="password"/>
       </div>
-      <button class="btn btn-primary">Submit</button>
-    </form>
-  </div>
-</div>
+      <button class="btn btn-light">Login</button>
+    </div>
+  </Form>
 </template>
 
-<script >
+<script lang="ts">
+import {ErrorMessage, Field, Form} from 'vee-validate';
 
-export default {
-  data() {
-    return {
-      account:{
-        username:'',
-        password:''
-      },
-
-    };
+export default ({
+  components: {
+    Form,
+    Field,
+    ErrorMessage,
   },
 
-  methods:{
-    login(){
-
+  data() {
+    return {
+      email: '',
+      password: '',
+    };
+  },
+  methods: {
+    onSubmit() {
+      console.log(this.email);
     }
   }
 
-}
 
+});
 </script>
 
 <style>
-
-.login-form{
-  margin: 0 auto;
-  max-width: 500px;
+.form-login {
+  padding-top: 50px;
   background-color: cadetblue;
-  padding:20px ;
-  border-radius: 7px;
+  margin: auto;
+  max-width: 500px;
+  padding: 30px;
+  border-radius: 5px;
+  margin-top: 100px;
 }
-.form-label{
+
+.form-label {
   float: left;
+}
+
+.err-message {
+  color: red;
 }
 </style>
