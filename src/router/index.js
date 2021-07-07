@@ -1,19 +1,26 @@
-import {createRouter , createWebHistory} from "vue-router";
+import {createRouter, createWebHistory} from "vue-router";
 
 import defaultLayout from '../components/layout/defaultLayout'
 import login from '../views/Auth/login.vue'
-
+import index from '../views/post/index'
 const routes = [
     {
-        path : '/',
-        component:defaultLayout,
+        path: '/',
+        component: defaultLayout,
     },
     {
-        path:'/login',
-        meta:{
+        path: '/login',
+        meta: {
             layout: 'blank'
         },
         component: login,
+    },
+    {
+        path: '/post',
+        meta: {
+            layout: 'blank'
+        },
+        component: index,
     }
 
 ]

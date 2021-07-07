@@ -1,144 +1,33 @@
 <template>
-  <div class="section" style="background-color:rgb(31,32,41);">
-    <div class="container">
-      <div class="row full-height justify-content-center">
-        <div class="col-12 text-center align-self-center">
-          <div class="section pb-5 sm-2 text-center">
-            <h6 class="mb-0 pb-3">
-              <span style="color: rgb(255,235,167);">Log In</span>
-              <span style="color: rgb(255,235,167);">Sign Up</span>
-            </h6>
-            <input id="reg-log" class="checkbox" name="reg-log" type="checkbox"/>
-            <label for="reg-log"></label>
-            <div class="card-3d-wrap mx-auto">
-              <div class="card-3d-wrapper">
-                <div class="card-front">
-                  <div class="center-wrap">
-                    <!--                    login-->
-                    <Form @submit="onLogin">
-                      <div class="section text-center">
-                        <h4 class="mb-4 pb-3" style="    color: rgb(255,235,167);
-                            text-transform: uppercase;">Log In</h4>
-                        <div class="form-group">
-                          <Field v-model="email" autocomplete="off" class="form-style" name="email"
-                                 placeholder="Your Email" rules="required|email|minLength:8,128" type="text"/>
-                          <div class="err-block">
-                            <ErrorMessage class="err-message" name="email"/>
-                          </div>
-                          <i class="input-icon uil uil-at"></i>
-                        </div>
-                        <div class="form-group mt-2">
-                          <Field v-model="password" autocomplete="off" class="form-style" name="password"
-                                 placeholder="Your Password"
-                                 rules="required"
-                                 type="password"/>
-                          <div class="err-block">
-                            <ErrorMessage class="err-message" name="password"/>
-                          </div>
-
-                        </div>
-                        <button class="btn mt-4" style=" background-color: rgb(255,235,167);">
-                          Login
-                        </button>
-                        <!--                      <a class="btn mt-4" href="#">submit</a>-->
-                        <p class="mb-0 mt-4 text-center"><a class="link" href="#0">Forgot your password?</a></p>
-                      </div>
-                    </Form>
-                    <!--                    end login-->
-
-                  </div>
-                </div>
-                <div class="card-back">
-                  <div class="center-wrap">
-                    <!--                    begin register-->
-                    <Form @submit="onRegister">
-                      <div class="section text-center">
-                        <h4 class="mb-4 pb-3">Sign Up</h4>
-                        <div class="form-group">
-                          <Field v-model="fullname" autocomplete="off" class="form-style" name="fullname"
-                                 placeholder="Full Name" rules="required|minLength:8,128" type="text"/>
-                          <div class="err-block">
-                            <ErrorMessage class="err-message" name="fullname"/>
-                          </div>
-                        </div>
-                        <div class="form-group mt-2">
-                          <Field v-model="email" autocomplete="off" class="form-style" name="email"
-                                 placeholder="Email" rules="required|email" type="text"/>
-                          <div class="err-block">
-                            <ErrorMessage class="err-message" name="email"/>
-                          </div>
-                        </div>
-                        <div class="form-group mt-2">
-                          <Field v-model="password" autocomplete="off" class="form-style" name="password"
-                                 placeholder="Password"
-                                 rules="required" type="password"/>
-                          <div class="err-block">
-                            <ErrorMessage class="err-message" name="password"/>
-                          </div>
-                        </div>
-                        <button class="btn mt-4" style=" background-color: rgb(255,235,167);">
-                          Sign UP
-                        </button>
-                      </div>
-                    </Form>
-                    <!--                    end register-->
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <h1>This is post index</h1>
+  <li v-for="item in posts" :key="item.message">
+    {{ item.id }}
+    {{ item.title }}
+  </li>
 </template>
 
 <script lang="ts">
 import axios from 'axios';
-import {ErrorMessage, Field, Form} from 'vee-validate';
 
-const API_URL = "http://127.0.0.1:8000";
+const API_URL = "http://127.0.0.1:8000/api/posts";
 
 export default ({
-  components: {
-    Form,
-    Field,
-    ErrorMessage,
-  },
+
 
   data() {
-    return {
-      email: '',
-      password: '',
-      fullname: '',
-    };
+      return{
+        posts:[],
+    }
+  },
+  created() {
+    axios.get(API_URL).then(response => {
+      this.posts = response.data.data;
+       console.log(response.data.data);
+    });
   },
   methods: {
-    onLogin() {
-      var bodyFormData = new FormData();
-      bodyFormData.append("email", this.email);
-      bodyFormData.append("password", this.password);
-      axios({
-        method: "POST",
-        url: `${API_URL}/admin/login`,
-        data: bodyFormData,
-        headers: {"Content-Type": "multipart/form-data"},
-      })
-          .then(function (response) {
-            localStorage.setItem("token", response.data.token);
-            alert("Đăng nhập thành công");
-          })
-          .catch(function (error) {
-            alert("Login Faill!")
-            console.log(error)
-          });
-
-    },
-    onRegister() {
-      alert("oke");
-
-    }
   }
+
 
 });
 </script>
