@@ -2,7 +2,7 @@
   <div class="section" style="background-color:rgb(31,32,41);">
     <div class="container">
       <div class="row full-height justify-content-center">
-        <div class="col-12 text-center align-self-center py-5">
+        <div class="col-12 text-center align-self-center">
           <div class="section pb-5 sm-2 text-center">
             <h6 class="mb-0 pb-3">
               <span style="color: rgb(255,235,167);">Log In</span>
@@ -94,7 +94,10 @@
 </template>
 
 <script lang="ts">
+import axios from 'axios';
 import {ErrorMessage, Field, Form} from 'vee-validate';
+
+const API_URL = "http://127.0.0.1:8000";
 
 export default ({
   components: {
@@ -107,11 +110,29 @@ export default ({
     return {
       email: '',
       password: '',
+      fullname: '',
     };
   },
   methods: {
     onLogin() {
-      alert(this.email);
+      var bodyFormData = new FormData();
+      bodyFormData.append("email", this.email);
+      bodyFormData.append("password", this.password);
+      axios({
+        method: "POST",
+        url: `${API_URL}/admin/login`,
+        data: bodyFormData,
+        headers: {"Content-Type": "multipart/form-data"},
+      })
+          .then(function (response) {
+            localStorage.setItem("token", response.data.token);
+            alert("Đăng nhập thành công");
+          })
+          .catch(function (error) {
+            alert("Login Faill!")
+            console.log(error)
+          });
+
     },
     onRegister() {
       alert("oke");
@@ -196,7 +217,6 @@ h6 span {
   border-radius: 50%;
   color: #ffeba7;
   background-color: #102770;
-  font-family: 'unicons';
   content: '\eb4f';
   z-index: 20;
   top: -10px;
