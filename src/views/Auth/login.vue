@@ -3,7 +3,7 @@
     <div class="container">
       <div class="row full-height justify-content-center">
         <div class="col-12 text-center align-self-center py-5">
-          <div class="section pb-5 pt-5 pt-sm-2 text-center">
+          <div class="section pb-5 sm-2 text-center">
             <h6 class="mb-0 pb-3">
               <span style="color: rgb(255,235,167);">Log In</span>
               <span style="color: rgb(255,235,167);">Sign Up</span>
@@ -15,7 +15,7 @@
                 <div class="card-front">
                   <div class="center-wrap">
                     <!--                    login-->
-                    <Form @submit="onSubmit">
+                    <Form @submit="onLogin">
                       <div class="section text-center">
                         <h4 class="mb-4 pb-3" style="    color: rgb(255,235,167);
                             text-transform: uppercase;">Log In</h4>
@@ -30,7 +30,8 @@
                         <div class="form-group mt-2">
                           <Field v-model="password" autocomplete="off" class="form-style" name="password"
                                  placeholder="Your Password"
-                                 rules="required|minLength:npm i --save @fortawesome/fontawesome-svg-core8,128" type="password"/>
+                                 rules="required"
+                                 type="password"/>
                           <div class="err-block">
                             <ErrorMessage class="err-message" name="password"/>
                           </div>
@@ -50,27 +51,36 @@
                 <div class="card-back">
                   <div class="center-wrap">
                     <!--                    begin register-->
-
-                    <div class="section text-center">
-                      <h4 class="mb-4 pb-3">Sign Up</h4>
-                      <div class="form-group">
-                        <input id="logname" autocomplete="off" class="form-style" name="logname"
-                               placeholder="Your Full Name"
-                               type="text">
-                        <i class="input-icon uil uil-user"></i>
+                    <Form @submit="onRegister">
+                      <div class="section text-center">
+                        <h4 class="mb-4 pb-3">Sign Up</h4>
+                        <div class="form-group">
+                          <Field v-model="fullname" autocomplete="off" class="form-style" name="fullname"
+                                 placeholder="Full Name" rules="required|minLength:8,128" type="text"/>
+                          <div class="err-block">
+                            <ErrorMessage class="err-message" name="fullname"/>
+                          </div>
+                        </div>
+                        <div class="form-group mt-2">
+                          <Field v-model="email" autocomplete="off" class="form-style" name="email"
+                                 placeholder="Email" rules="required|email" type="text"/>
+                          <div class="err-block">
+                            <ErrorMessage class="err-message" name="email"/>
+                          </div>
+                        </div>
+                        <div class="form-group mt-2">
+                          <Field v-model="password" autocomplete="off" class="form-style" name="password"
+                                 placeholder="Password"
+                                 rules="required" type="password"/>
+                          <div class="err-block">
+                            <ErrorMessage class="err-message" name="password"/>
+                          </div>
+                        </div>
+                        <button class="btn mt-4" style=" background-color: rgb(255,235,167);">
+                          Sign UP
+                        </button>
                       </div>
-                      <div class="form-group mt-2">
-                        <input autocomplete="off" class="form-style" name="logemail" placeholder="Your Email"
-                               type="email">
-                        <i class="input-icon uil uil-at"></i>
-                      </div>
-                      <div class="form-group mt-2">
-                        <input autocomplete="off" class="form-style" name="logpass"
-                               placeholder="Your Password" type="password">
-                        <i class="input-icon uil uil-lock-alt"></i>
-                      </div>
-                      <a class="btn mt-4" href="#">submit</a>
-                    </div>
+                    </Form>
                     <!--                    end register-->
                   </div>
                 </div>
@@ -100,8 +110,11 @@ export default ({
     };
   },
   methods: {
-    onSubmit() {
+    onLogin() {
       alert(this.email);
+    },
+    onRegister() {
+      alert("oke");
     }
   }
 
@@ -223,7 +236,7 @@ h6 span {
 
 .card-front, .card-back {
   width: 100%;
-  height: 100%;
+  height: 120%;
   background-color: #2a2b38;
   background-image: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg');
   background-position: bottom center;
