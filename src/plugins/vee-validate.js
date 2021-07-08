@@ -45,15 +45,18 @@ defineRule('minLength', (value, [min, max]) => {
     return true;
 });
 
-defineRule('min', (value, [limit]) => {
-    // The field is empty so it should pass
-    if (!value || !value.length) {
-        return true;
+defineRule("min", (value, [min]) => {
+    if (value && value.length < min) {
+      return `Should be at least ${min} characters`;
     }
-
-    if (value.length < limit) {
-        return `This field must be at least ${limit} characters`;
-    }
-
+  
     return true;
-});
+  });
+
+defineRule("confirmed", (value, [other]) => {
+    if (value !== other) {
+      return `Passwords do not match`;
+    }
+  
+    return true;
+  });

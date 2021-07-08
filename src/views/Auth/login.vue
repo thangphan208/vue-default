@@ -15,13 +15,13 @@
                 <div class="card-front">
                   <div class="center-wrap">
                     <!--                    login-->
-                    <Form @submit="onLogin">
+                    <Form @submit="onLogin" ref="formLogin">
                       <div class="section text-center">
                         <h4 class="mb-4 pb-3" style="    color: rgb(255,235,167);
                             text-transform: uppercase;">Log In</h4>
                         <div class="form-group">
                           <Field v-model="email" autocomplete="off" class="form-style" name="email"
-                                 placeholder="Your Email" rules="required|email|minLength:8,128" type="text"/>
+                                 placeholder="Your Email" rules="required|email" type="text"/>
                           <div class="err-block">
                             <ErrorMessage class="err-message" name="email"/>
                           </div>
@@ -30,7 +30,7 @@
                         <div class="form-group mt-2">
                           <Field v-model="password" autocomplete="off" class="form-style" name="password"
                                  placeholder="Your Password"
-                                 rules="required"
+                                 rules="required|min:8"
                                  type="password"/>
                           <div class="err-block">
                             <ErrorMessage class="err-message" name="password"/>
@@ -55,7 +55,7 @@
                       <div class="section text-center">
                         <h4 class="mb-4 pb-3">Sign Up</h4>
                         <div class="form-group">
-                          <Field v-model="fullname" autocomplete="off" class="form-style" name="fullname"
+                          <Field v-model="name" autocomplete="off" class="form-style" name="fullname"
                                  placeholder="Full Name" rules="required|minLength:8,128" type="text"/>
                           <div class="err-block">
                             <ErrorMessage class="err-message" name="fullname"/>
@@ -71,9 +71,17 @@
                         <div class="form-group mt-2">
                           <Field v-model="password" autocomplete="off" class="form-style" name="password"
                                  placeholder="Password"
-                                 rules="required" type="password"/>
+                                 rules="required|min:8" type="password"/>
                           <div class="err-block">
                             <ErrorMessage class="err-message" name="password"/>
+                          </div>
+                        </div>
+                        <div class="form-group mt-2">
+                          <Field v-model="password_confirmation" autocomplete="off" class="form-style" name="password_confirmation"
+                                 placeholder="re-enter password"
+                                 rules="required|confirmed:@password" type="password"/>
+                          <div class="err-block">
+                            <ErrorMessage class="err-message" name="password_confirmation"/>
                           </div>
                         </div>
                         <button class="btn mt-4" style=" background-color: rgb(255,235,167);">
@@ -97,7 +105,7 @@
 import axios from 'axios';
 import {ErrorMessage, Field, Form} from 'vee-validate';
 
-const API_URL = "http://127.0.0.1:8000";
+const API_URL = "http://127.0.0.1:8000/api/auth";
 
 export default ({
   components: {
@@ -109,33 +117,60 @@ export default ({
   data() {
     return {
       email: '',
+      name: '',
       password: '',
-      fullname: '',
+      password_confirmation:''
     };
   },
   methods: {
-    onLogin() {
+    onLogin : function() {
       var bodyFormData = new FormData();
       bodyFormData.append("email", this.email);
       bodyFormData.append("password", this.password);
       axios({
         method: "POST",
-        url: `${API_URL}/admin/login`,
+        url: `${API_URL}/login`,
         data: bodyFormData,
         headers: {"Content-Type": "multipart/form-data"},
       })
-          .then(function (response) {
-            localStorage.setItem("token", response.data.token);
-            alert("Đăng nhập thành công");
-          })
-          .catch(function (error) {
-            alert("Login Faill!")
-            console.log(error)
-          });
+        .then(function (response) {
+          localStorage.setItem("token", response.data.token);
+          alert("Đăng nhập thành công");
 
+        })
+        .catch(function (response) {
+          alert("Login Faill!")
+          console.log(response)
+        });
+        this.$nextTick(() => {
+          this.email = '';
+          this.password = ''; 
+          this.$refs.formLogin.reset();
+       })
     },
     onRegister() {
-      alert("oke");
+      var bodyFormData = new FormData();
+      bodyFormData.append("name", this.name);
+      bodyFormData.append("email", this.email);
+      bodyFormData.append("password", this.password);
+      bodyFormData.append("password_confirmation", this.password_confirmation);
+      axios({
+        method: "POST",
+        url: `${API_URL}/register`,
+        data: bodyFormData,
+        headers: {"Content-Type": "multipart/form-data"},
+      })
+        .then(function (response) {
+          // localStorage.setItem("token", response.data.token);
+          console.log(response);
+          alert("Đăng kí tài khoản thành công");
+          
+        })
+        .catch(function (response) {
+          alert("Đăng kí thất bại!")
+          console.log(response);
+        });
+
 
     }
   }
